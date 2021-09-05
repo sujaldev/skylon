@@ -29,7 +29,7 @@ class NavigationBar(QFrame):
         self.init_layout()
 
     def create_button(self, name):
-        button_icon_path = f"./{name}.svg"
+        button_icon_path = f"./assets/{name}.svg"
         button = QPushButton()
         button.setStyleSheet(f"""
         QPushButton {{
