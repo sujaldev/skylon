@@ -1,6 +1,6 @@
 import sys
 from cefpython3 import cefpython as cef
-from db_handler import create_user, user_exists, cache_user
+from src.chrome.db_handler import create_user, user_exists, cache_user
 
 
 class WelcomeLauncher:

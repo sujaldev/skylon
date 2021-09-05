@@ -6,7 +6,7 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QWindow
 from PyQt5.QtWidgets import *
 
-from navbar import NavigationBar
+from src.chrome.navbar import NavigationBar
 
 
 class ChromiumApplication(QApplication):
