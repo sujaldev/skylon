@@ -3,13 +3,14 @@ from PyQt5.QtWidgets import (
     QFrame,
     QHBoxLayout,
     QPushButton,
-    QLineEdit
+    QLineEdit,
 )
 
 
 class NavigationBar(QFrame):
-    def __init__(self, browser=None):
+    def __init__(self, parent=None, browser=None):
         super().__init__()
+        self.parent = parent
         self.browser = browser
 
         self.back_btn = self.create_button("Back")
@@ -74,7 +75,7 @@ class NavigationBar(QFrame):
     def init_layout(self):
         self.setStyleSheet("""
         background: #2A292E;
-        max-height: 40px;
+        min-height: 20px;
         """)
         self.frame_layout.addWidget(self.back_btn, 0)
         self.frame_layout.addWidget(self.forward_btn, 0)
