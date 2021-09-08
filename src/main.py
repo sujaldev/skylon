@@ -1,6 +1,5 @@
 import os
 import pickle
-from time import sleep
 
 import chrome  # not to be confused with google chrome
 
@@ -22,8 +21,6 @@ def get_user_data():
 def launch():
     if is_first_launch():
         chrome.WelcomeLauncher()
-        sleep(10)
-        launch()
     else:
         user_data = get_user_data()
         engine_preference = user_data[-1]
