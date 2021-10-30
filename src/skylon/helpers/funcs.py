@@ -1,4 +1,4 @@
-from src.browser_engine.helpers.CONSTANTS import WHITESPACE, ASCII_DIGIT, ASCII_ALPHA
+from src.skylon.helpers.CONSTANTS import WHITESPACE, ASCII_DIGIT, ASCII_ALPHA
 
 
 def is_whitespace(string):

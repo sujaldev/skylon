@@ -7,7 +7,7 @@ https://html.spec.whatwg.org/multipage/parsing.html#preprocessing-the-input-stre
 THE SPECIFICATION FOR PREPROCESSING CSS IS DEFINED HERE:
 https://www.w3.org/TR/css-syntax-3/#input-preprocessing
 """
-from src.browser_engine.helpers.CONSTANTS import CARRIAGE_RETURN, NEWLINE, NULL, REPLACEMENT_CHARACTER
+from src.skylon.helpers.CONSTANTS import CARRIAGE_RETURN, NEWLINE, NULL, REPLACEMENT_CHARACTER
 
 
 # TODO: IMPLEMENT HTML PREPROCESSOR NON CHAR HANDLING
