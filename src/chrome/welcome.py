@@ -6,8 +6,8 @@ from src.chrome.db_handler import create_user, user_exists, cache_user
 class WelcomeLauncher:
     WINDOW_TITLE = "Welcome!"
     DEFAULT_RECT = [400, 0, 1400, 900]
-    # UI_URL = "https://sujalsinghx86.github.io/school-project-web/index.html?#"
-    UI_URL = "file:///home/picard/NIVZER/PROJECTS/SKYLON/skylon-web-ui/index.html?#"
+    UI_URL = "https://sujalsinghx86.github.io/school-project-web/index.html?#"
+    # UI_URL = "file:///home/picard/nivzer/projects/skylon/skylon-web/index.html?#"
     HANDLERS = []
 
     def __init__(self):
