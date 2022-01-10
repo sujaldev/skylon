@@ -8,7 +8,7 @@ dirs = [
 ]
 
 files = [
-    "error.log"
+    "../src/error.log"
 ]
 
 
