@@ -20,6 +20,7 @@ class ChromiumApplication(QApplication):
         timer.start(10)
         return timer
 
+    # noinspection PyMethodMayBeStatic
     def on_timeout(self):
         cef.MessageLoopWork()
 
@@ -58,12 +59,23 @@ class ChromiumBrowserWindow(QMainWindow):
             del self.web_view.browser  # required to close cleanly
 
 
+class LoadHandler:
+    def __init__(self, web_view_widget):
+        self.web_view_widget = web_view_widget
+
+    # noinspection PyPep8Naming
+    def OnLoadStart(self, browser, *_, **__):
+        navbar = self.web_view_widget.container.chrome
+        navbar.url_bar.setText(browser.GetUrl())
+
+
 class WebViewWidget(QWidget):
     DEFAULT_URL = "https://www.google.com"
-    HANDLERS = []
+    HANDLERS = [LoadHandler]
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.container = parent
         self.browser = None
         self.browser_widget = None
         self_layout = QVBoxLayout(self)
@@ -85,7 +97,7 @@ class WebViewWidget(QWidget):
 
     def set_handlers(self):
         for handler in self.HANDLERS:
-            self.browser.SetClientHanlder(handler(self))
+            self.browser.SetClientHandler(handler(self))
 
     def resizeEvent(self, event):
         if self.browser is not None:
@@ -96,6 +108,7 @@ def launch_chromium():
     sys.excepthook = cef.ExceptHook
     cef.Initialize()
     app = ChromiumApplication()
+    # noinspection PyUnusedLocal
     window = ChromiumBrowserWindow()
     app.exec()
     app.timer.stop()
