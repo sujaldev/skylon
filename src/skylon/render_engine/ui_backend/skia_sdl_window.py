@@ -1,5 +1,8 @@
 import skia
-from event_loop import sdl, sdl_event_loop
+if __name__ == "__main__":
+    from event_loop import sdl, sdl_event_loop
+else:
+    from .event_loop import sdl, sdl_event_loop
 
 
 class Window:
