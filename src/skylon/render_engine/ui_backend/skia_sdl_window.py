@@ -1,4 +1,5 @@
 import skia
+
 if __name__ == "__main__":
     from event_loop import sdl, sdl_event_loop
 else:
@@ -10,7 +11,7 @@ class Window:
     BYTE_ORDER = {
         # ---------- ->   RED        GREEN       BLUE        ALPHA
         "BIG_ENDIAN": (0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff),
-        "LIL_ENDIAN": (0x000000ff, 0x000ff00, 0x00ff0000, 0xff000000)
+        "LIL_ENDIAN": (0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000)
     }
 
     PIXEL_DEPTH = 32  # BITS PER PIXEL
@@ -78,7 +79,6 @@ class Window:
         """
         Converts Skia Surface into a bytes object containing pixel data
         """
-        # TODO: rename this function depending on type of outputs in following variables
         image = self.skia_surface.makeImageSnapshot()
         pixels = image.tobytes()
         return pixels
@@ -112,4 +112,4 @@ class Window:
 
 
 if __name__ == "__main__":
-    window = Window("Browser Test", 500, 500, flags=sdl.SDL_WINDOW_SHOWN | sdl.SDL_WINDOW_RESIZABLE)
+    Window("Browser Test", 500, 500, flags=sdl.SDL_WINDOW_SHOWN | sdl.SDL_WINDOW_RESIZABLE)

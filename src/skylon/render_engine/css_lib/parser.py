@@ -47,9 +47,12 @@ class CSSTokenStream:
 
 
 class CSSParser:
-    def __init__(self, source):
-        self.stream = CSSTokenizer(source).output
-        self.stream = CSSTokenStream(self.stream)
+    def __init__(self, source, from_tokens=False):
+        if not from_tokens:
+            self.stream = CSSTokenizer(source).output
+            self.stream = CSSTokenStream(self.stream)
+        else:
+            self.stream = CSSTokenStream(source)
 
         self.errors = 0
 
@@ -136,6 +139,64 @@ class CSSParser:
             else:
                 self.stream.reconsuming = True
                 qualified_rule.prelude.append(self.consume_a_component_value())
+
+    def consume_a_style_blocks_contents(self):
+        declarations, rules = [], []
+
+        while True:
+            current_token, next_token = self.consume()
+            token_type = current_token.token_type()
+
+            if token_type in ("whitespace-token", "semicolon-token"):
+                pass
+
+            elif token_type == "EOF-token":
+                declarations.extend(rules)
+                return declarations
+
+            elif token_type == "at-keyword-token":
+                self.stream.reconsuming = True
+                rule = self.consume_an_at_rule()
+                if rule:
+                    rules.append(rule)
+
+            elif token_type == "ident-token":
+                temp = [current_token]
+                while current_token.token_type() not in ("semicolon-token", "EOF-token"):
+                    temp.append(self.consume_a_component_value())
+                    current_token, next_token = self.consume()
+                consumed_declarations = CSSParser(temp, from_tokens=True).consume_a_declaration()
+                if consumed_declarations:
+                    declarations.append(consumed_declarations)
+
+            else:
+                self.stream.reconsuming = True
+                while next_token.token_type() not in ("semicolon-token", "EOF-token"):
+                    self.consume_a_component_value()
+
+    def consume_a_declaration(self):
+        current_token, next_token = self.consume()
+        declaration = Declaration(name=current_token.value)
+
+        while next_token.token_type() == "whitespace-token":
+            current_token, next_token = self.consume()
+
+        if next_token.token_type() != "colon-token":
+            return
+        else:
+            current_token, next_token = self.consume()
+
+        while next_token.token_type() == "whitespace-token":
+            current_token, next_token = self.consume()
+
+        if next_token.token_type() != "EOF-token":
+            value = self.consume_a_component_value()
+            declaration.value.append(value)
+
+        current_token, next_token = self.consume()
+        while current_token.token_type() == "whitespace-token":
+            current_token, next_token = self.consume()
+        return declaration
 
     def consume_a_component_value(self):
         current_token, next_token = self.consume()

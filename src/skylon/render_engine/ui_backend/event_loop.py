@@ -7,8 +7,9 @@ def sdl_event_loop():
     running = True
 
     while running:
-        pending_events = sdl.SDL_PollEvent(pointer(event))
-        while pending_events != 0:
+        event_pointer = pointer(event)
+        pending_events = sdl.SDL_PollEvent(event_pointer)
+        while pending_events:
 
             # QUIT HANDLER
             if event.type == sdl.SDL_QUIT:
@@ -17,4 +18,5 @@ def sdl_event_loop():
                 break
 
             # UPDATE PENDING EVENTS
-            pending_events = sdl.SDL_PollEvent(pointer(event))
+            pending_events = sdl.SDL_PollEvent(event_pointer)
+        sdl.SDL_WaitEvent(event_pointer)

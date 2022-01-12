@@ -33,7 +33,7 @@ class Declaration:
         self.important = important
 
     def __repr__(self):
-        return f"{self.name}: {self.value.value};"
+        return f"{self.name}: {self.value};"
 
 
 class CSSFunction:
