@@ -1,0 +1,7 @@
+.idea/
+venv/
+__pycache__/
+blob_storage/
+webrtc_event_logs/
+*.log
+*.cache
