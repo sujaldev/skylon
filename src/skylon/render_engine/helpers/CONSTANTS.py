@@ -60,5 +60,7 @@ SPECIAL_NODES = [
     "th", "thead", "title", "tr", "track", "ul", "wbr", "xmp", "mi", "mo", "mn", "ms", "mtext", "annotation-xml",
     "foreignObject", "desc", "title"
 ]
+VOID_ELEMENTS = ["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track",
+                 "wbr"]
 
 MAXIMUM_ALLOWED_CODE_POINT = 1114111

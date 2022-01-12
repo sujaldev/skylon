@@ -9,14 +9,15 @@ PARSING SUCH LANGUAGES IS EASIER. HTML IS NOT SUCH A LANGUAGE AND HAS TO PARSED 
 A STATE MACHINE. THE STATE MACHINE TO TOKENIZE HTML IS DESCRIBE HERE:
 https://html.spec.whatwg.org/multipage/parsing.html#tokenization
 """
-from src.skylon.html_lib.structures.TOKENS import *
+from render_engine.html_lib.structures.TOKENS import *
 
-from src.skylon.helpers.preprocessor import preprocess_html
-from src.skylon.helpers.stream import CharStream
-from src.skylon.helpers.funcs import inside
-from src.skylon.helpers.CONSTANTS import *
+from render_engine.helpers.preprocessor import preprocess_html
+from render_engine.helpers.stream import CharStream
+from render_engine.helpers.funcs import inside
+from render_engine.helpers.CONSTANTS import *
 
 
+# noinspection DuplicatedCode
 class HTMLTokenizer:
     def __init__(self, source):
         # INITIALIZE STREAM
@@ -38,7 +39,7 @@ class HTMLTokenizer:
         self.last_emitted_start_tag_name = None
 
         # TOKENIZE RIGHT AWAY
-        self.tokenize()
+        # self.tokenize()
 
     ########################################################
     # ALGORITHMS

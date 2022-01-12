@@ -3,9 +3,9 @@ THIS STAGE PRODUCES A STYLESHEET OBJECT AS DESCRIBE HERE:
 https://www.w3.org/TR/css-syntax-3/#parsing
 """
 
-from src.browser_engine.css_lib.structures.TOKENS import *
-from src.browser_engine.css_lib.tokenizer import CSSTokenizer
-from src.browser_engine.css_lib.structures.CSSOM import *
+from render_engine.css_lib.structures.TOKENS import *
+from render_engine.css_lib.tokenizer import CSSTokenizer
+from render_engine.css_lib.structures.CSSOM import *
 
 
 class InfiniteList(list):
