@@ -17,7 +17,7 @@ class Window:
     PIXEL_DEPTH = 32  # BITS PER PIXEL
     PIXEL_PITCH_FACTOR = 4  # Multiplied by Width to get BYTES PER ROW
 
-    def __init__(self, title, width, height, x=None, y=None, flags=None):
+    def __init__(self, title, width, height, x=None, y=None, flags=None, handlers=None):
         self.title = bytes(title, "utf8")
         self.width = width
         self.height = height
@@ -34,12 +34,14 @@ class Window:
         if flags is None:
             self.flags = self.DEFAULT_FLAGS
 
+        # Handlers
+        self.handlers = handlers
+        if self.handlers is None:
+            self.handlers = {}
+
         # SET RGBA MASKS BASED ON BYTE_ORDER
         is_big_endian = sdl.SDL_BYTEORDER == sdl.SDL_BIG_ENDIAN
-        if is_big_endian:
-            self.RGBA_MASKS = self.BYTE_ORDER["BIG_ENDIAN"]
-        else:
-            self.RGBA_MASKS = self.BYTE_ORDER["LIL_ENDIAN"]
+        self.RGBA_MASKS = self.BYTE_ORDER["BIG_ENDIAN" if is_big_endian else "LIL_ENDIAN"]
 
         # CALCULATE PIXEL PITCH
         self.PIXEL_PITCH = self.PIXEL_PITCH_FACTOR * self.width
@@ -50,7 +52,6 @@ class Window:
         # SDL INIT
         sdl.SDL_Init(sdl.SDL_INIT_EVENTS)  # INITIALIZE SDL EVENTS
         self.sdl_window = self.__create_SDL_Window()
-        sdl_event_loop()
 
     def __create_SDL_Window(self):
         window = sdl.SDL_CreateWindow(
@@ -110,6 +111,10 @@ class Window:
         # Update window with new copied data
         sdl.SDL_UpdateWindowSurface(self.sdl_window)
 
+    def start_event_loop(self):
+        sdl_event_loop(self.handlers)
+
 
 if __name__ == "__main__":
-    Window("Browser Test", 500, 500, flags=sdl.SDL_WINDOW_SHOWN | sdl.SDL_WINDOW_RESIZABLE)
+    skiaSDLWindow = Window("Browser Test", 500, 500, flags=sdl.SDL_WINDOW_SHOWN | sdl.SDL_WINDOW_RESIZABLE)
+    skiaSDLWindow.start_event_loop()
