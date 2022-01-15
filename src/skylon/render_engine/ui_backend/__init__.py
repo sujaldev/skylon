@@ -45,6 +45,9 @@ class Window:
 
         # SKIA INIT
         self.skia_surface = self.__create_skia_surface()
+        # Creating a member variable because SDL_CreateRGBSurfaceFrom does not keep pixel data but a pointer to it,
+        # so if it were to be a local variable it'd go out of scope and be deleted by the python garbage collector.
+        self.skia_pixel_data = None
 
         # SDL INIT
         sdl.SDL_Init(sdl.SDL_INIT_EVENTS)  # INITIALIZE SDL EVENTS
@@ -73,22 +76,21 @@ class Window:
         surface = skia.Surface.MakeRaster(surface_blueprint)
         return surface
 
-    def __pixels_from_skia_surface(self):
+    def __update_pixel_data_from_skia_surface(self):
         """
         Converts Skia Surface into a bytes object containing pixel data
         """
         image = self.skia_surface.makeImageSnapshot()
-        pixels = image.tobytes()
-        return pixels
+        self.skia_pixel_data = image.tobytes()
 
     def __transform_skia_surface_to_SDL_surface(self):
         """
         Converts Skia Surface to an SDL surface by first converting
         Skia Surface to Pixel Data using .__pixels_from_skia_surface()
         """
-        pixels = self.__pixels_from_skia_surface()
+        self.__update_pixel_data_from_skia_surface()
         sdl_surface = sdl.SDL_CreateRGBSurfaceFrom(
-            pixels,
+            self.skia_pixel_data,
             self.width, self.height,
             self.PIXEL_DEPTH, self.PIXEL_PITCH,
             *self.RGBA_MASKS
@@ -96,13 +98,12 @@ class Window:
         return sdl_surface
 
     def update(self):
-        rect = sdl.SDL_Rect(0, 0, self.width, self.height)
         window_surface = sdl.SDL_GetWindowSurface(self.sdl_window)  # the SDL surface associated with the window
         transformed_skia_surface = self.__transform_skia_surface_to_SDL_surface()
         # Transfer skia surface to SDL window's surface
         sdl.SDL_BlitSurface(
-            transformed_skia_surface, rect,
-            window_surface, rect
+            transformed_skia_surface, None,
+            window_surface, None
         )
 
         # Update window with new copied data
