@@ -47,7 +47,7 @@ def is_html_integration_point(element):
     if element.type == "annotation-xml":
         return element.attributes["encoding"].lower() in ["text/html", "application/xhtml+xml"]
 
-    return element.type in ["foreignObject", "desc", "title"]  # POSSIBLE BUG DUE TO TITLE (title is also an html tag)
+    return element.type in ["foreignObject", "desc", "title"]  # POSSIBLE BUG DUE TO TITLE (title is also a html tag)
 
 
 SPECIAL_NODES = [
@@ -64,3 +64,18 @@ VOID_ELEMENTS = ["area", "base", "br", "col", "embed", "hr", "img", "input", "li
                  "wbr"]
 
 MAXIMUM_ALLOWED_CODE_POINT = 1114111
+
+# ----------------------------------------------------------------------------------------------------------------------
+# DEFAULT STYLESHEET
+
+HIDDEN_ELEMENTS = [
+    "area", "base", "basefont", "datalist", "head", "link", "meta", "noembed", "noframes", "param", "rp", "script",
+    "style", "template", "title"
+]
+
+BLOCK_ELEMENTS = [
+    "html", "body", "article", "section", "nav", "aside", "h1", "h2", "h3", "h4", "h5", "h6", "hgroup", "header",
+    "footer", "address", "p", "hr", "pre", "blockquote", "ol", "ul", "menu", "li", "dl", "dt", "dd", "figure",
+    "figcaption", "main", "div", "table", "form", "fieldset", "legend", "details", "summary"
+]
+# ----------------------------------------------------------------------------------------------------------------------
