@@ -67,6 +67,7 @@ class Window:
         Initializes the main skia surface that will be drawn upon,
         creates a raster surface.
         """
+        self.PIXEL_PITCH = self.PIXEL_PITCH_FACTOR * self.width
         surface_blueprint = skia.ImageInfo.Make(
             self.width, self.height,
             ct=skia.kRGBA_8888_ColorType,
@@ -116,11 +117,20 @@ class Window:
         while True:
             sdl.SDL_WaitEvent(pointer(event))
 
+            window_resized = event.type == sdl.SDL_WINDOWEVENT and event.window.event == sdl.SDL_WINDOWEVENT_RESIZED
+            if window_resized:
+                self.__handle_resize(event)
+
             if event.type == sdl.SDL_QUIT:
                 break
 
             elif event.type in handled_events:
                 self.handlers[event.type](event)
+
+    def __handle_resize(self, event):
+        self.width = event.window.data1
+        self.height = event.window.data2
+        self.skia_surface = self.__create_skia_surface()
 
 
 if __name__ == "__main__":
