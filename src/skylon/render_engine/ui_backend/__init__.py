@@ -75,6 +75,8 @@ class Window:
         )
         # noinspection PyArgumentList
         surface = skia.Surface.MakeRaster(surface_blueprint)
+        with surface as canvas:
+            canvas.drawColor(skia.ColorWHITE)
         return surface
 
     def __update_pixel_data_from_skia_surface(self):
