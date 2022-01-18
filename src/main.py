@@ -1,7 +1,7 @@
 import os
 import pickle
 
-import chrome  # not to be confused with google chrome
+import chrome  # not to be confused with Google Chrome
 from skylon import Skylon
 
 

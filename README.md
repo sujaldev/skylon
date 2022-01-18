@@ -1,18 +1,36 @@
 # SKYLON
 
-Bringing python to the web. (idk y though)
+This is my attempt at making a browser, which started with different motives but
+now this is just a toy browser.
 
-## WHY?
+It features two engines:
 
-I started with the idea in mind creating `electronjs for python.` \
-At the time I didn't know about CEF Python.\
-After going through the hell that is html and css specifications, \
-and having realised about CEF Python's existence. This project is currently `aimless`!\
-Except for the knowledge gains from this project.
+- Chromium: to support, well, the entire web.
+- Skylon: the toy engine I built.
+
+To embed chromium [cefpython](https://github.com/cztomczak/cefpython) was used.
+
+Since this is a school project and implementing data storage either via mysql or
+pickle was a requirement, I have implemented a small user data section so that
+it can store your engine preference.
+
+### SCREENSHOTS
+
+_Welcome Launcher_
+![Welcome Launcher](./docs/images/welcome.png)
+
+_Welcome Launcher Sign Up/Login_
+![Welcome Launcher](./docs/images/welcome-login-signup.png)
+
+_Chromium_
+![img.png](./docs/images/chromium.png)
+_Skylon_
+![Skylon](./docs/images/skylon.png)
 
 ### CONTRIBUTE
 
-Visit [skylon-core](https://github.com/sujaldev/skylon-core) that's where the actual magic happens.
+To contribute to the skylon engine itself, create a pull request for the
+[core](https://github.com/sujaldev/skylon/tree/core) branch.
 
 ### HOW TO RUN?
 
@@ -25,15 +43,18 @@ python src/main.py
 
 ### SUPPORTED PLATFORMS
 
-- Linux
-- Windows (coming soon)
-- Mac (probably never)
+_NOTE: This project has cross-platform support but requires a bit of tweaking to
+support platforms other than linux_
+
+- [x] Linux
+- [ ] Windows (requires minor changes)
+- [ ] Mac (requires minor changes)
 
 ### Other linked repositories
 
 - [skylon-core](https://github.com/sujaldev/skylon-core) <br>
-  This contains the skylon engine itself, <br>
-  and it is a dependency for the current repository. <br> <br>
+  This repository contained the skylon engine, but now it <br>
+  has shifted to the core branch of this repository itself<br> <br>
 - [skylon-legacy](https://github.com/sujaldev/skylon-legacy) <br>
   This was my first attempt at creating a browser, <br>
   only to realise I am currently one stupid developer.
