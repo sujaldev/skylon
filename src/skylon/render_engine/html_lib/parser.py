@@ -108,6 +108,8 @@ class HTMLParser:
         token = self.token_stream.next()
         if token.type == "character":
             parent = self.open_elements[-1] if self.open_elements else None
+            if token.data.isspace():
+                return
             elem = TextNode(token, parent)
             if parent:
                 parent.children.append(elem)

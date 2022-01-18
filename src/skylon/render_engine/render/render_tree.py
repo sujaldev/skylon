@@ -5,9 +5,9 @@ else:
 
 
 class RenderTree:
-    def __init__(self, document, canvas, viewport_width, viewport_height, x=0, y=0):
+    def __init__(self, document, window, viewport_width, viewport_height, x=0, y=0):
         self.document = document
-        self.canvas = canvas
+        self.window = window
 
         self.x, self.y = x, y
         self.viewport_width = viewport_width
@@ -23,4 +23,5 @@ class RenderTree:
         self.layout_tree.build_layout()
 
     def paint(self):
-        self.layout_tree.paint(self.canvas)
+        with self.window.skia_surface as canvas:
+            self.layout_tree.paint(canvas)
