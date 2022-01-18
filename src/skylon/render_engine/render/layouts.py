@@ -115,7 +115,6 @@ class DocumentLayout(Layout):
         self.width, self.height = viewport_width, viewport_height
 
     def find_body_node(self):
-        print(self.dom_node.children)
         for child in self.dom_node.children:
             if child.tag.tag_name == "body":
                 return child
