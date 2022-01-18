@@ -1,5 +1,9 @@
-from chrome import Chrome
-from render_engine.ui_backend import sdl, Window
+if __name__ == '__main__':
+    from chrome import Chrome
+    from render_engine.ui_backend import sdl, Window
+else:
+    from .chrome import Chrome
+    from .render_engine.ui_backend import sdl, Window
 
 
 class Skylon:

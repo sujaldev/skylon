@@ -2,6 +2,7 @@ import os
 import pickle
 
 import chrome  # not to be confused with google chrome
+from skylon import Skylon
 
 
 def is_first_launch():
@@ -27,7 +28,7 @@ def launch():
         if engine_preference == "chromium":
             chrome.launch_chromium()
         else:
-            raise NotImplementedError
+            Skylon("Skylon Browser", 1000, 800).start_event_loop()
 
 
 launch()
