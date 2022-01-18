@@ -6,6 +6,8 @@ from render_engine.html_lib.parser import HTMLParser
 
 
 class TabUI:
+    DEBUG = True
+
     BASE_HEIGHT = 40
     BASE_WIDTH = 250
     MARGIN_LEFT = 20
@@ -82,6 +84,15 @@ class TabUI:
         if self.document:
             self.render_tree = self.create_render_tree()
             self.render_tree.paint()
+            self.log()
+
+    def log(self):
+        if self.DEBUG:
+            sep = "\n" + "-" * 20 + "\n"
+            print(sep + "Document:")
+            self.document.show_tree()
+            print(sep + "Layout:")
+            self.render_tree.layout_tree.show_tree()
 
     def __clear_document_canvas(self):
         canvas = self.window.skia_surface.getCanvas()

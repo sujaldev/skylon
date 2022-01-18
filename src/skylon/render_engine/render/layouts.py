@@ -11,6 +11,8 @@ def random_color():
     return int("".join(choice(seed) for i in range(6)) + "FF", 16)
 
 
+DEBUG = True
+
 DEFAULT_FONT_SIZE = 18
 DEFAULT_TEXT_COLOR = skia.ColorBLACK
 
@@ -73,7 +75,8 @@ class Layout:
         right = self.x + self.width
         bottom = self.y + self.height
         rect = skia.Rect(self.x, self.y, right, bottom)
-        paint = skia.Paint(Color=skia.ColorTRANSPARENT)
+        color = random_color() if DEBUG else skia.ColorTRANSPARENT
+        paint = skia.Paint(color)
         canvas.drawRect(rect, paint)
 
         if isinstance(self.dom_node, TextNode):
