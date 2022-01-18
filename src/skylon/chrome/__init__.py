@@ -1,7 +1,22 @@
 if __name__ == "__main__":
     from tab_ui import Tab, skia
 else:
+    import sdl2 as sdl
     from .tab_ui import Tab, skia
+
+
+class ClickableElement:
+    def __init__(self, x1, y1, x2, y2, click_handler):
+        self.x1, self.y1 = x1, y1
+        self.x2, self.y2 = x2, y2
+        self.click_handler = click_handler
+        self.focused = False
+
+    def __contains__(self, point):
+        x, y = point
+        x_match = self.x1 <= x <= self.x2
+        y_match = self.y1 <= y <= self.y2
+        return x_match and y_match
 
 
 class Chrome:
@@ -21,8 +36,8 @@ class Chrome:
     def __init__(self, window):
         self.window = window
 
-        self.tabs = []
-        self.active_tab = None
+        self.tabs = [Tab(self.window, 0, active=True)]
+        self.active_tab = 0
 
     def __draw_chrome_bg(self, canvas):
         bg_rect = skia.Rect(0, 0, self.window.width, self.CHROME_HEIGHT)
