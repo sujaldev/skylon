@@ -3,3 +3,4 @@ mysql-connector-python
 PyQt5
 PySDL2
 skia-python
+requests
