@@ -11,7 +11,10 @@ def random_color():
     return int("".join(choice(seed) for i in range(6)) + "FF", 16)
 
 
-DEFAULT_FONT = skia.Font(None, size=18)
+DEFAULT_FONT_SIZE = 18
+DEFAULT_TEXT_COLOR = skia.ColorBLACK
+
+DEFAULT_FONT = skia.Font(None, size=DEFAULT_FONT_SIZE)
 DEFAULT_FONT_METRICS = DEFAULT_FONT.getMetrics()
 
 
@@ -28,7 +31,7 @@ def calc_layout(node):
 
 
 class Layout:
-    def __init__(self, dom_node, parent=None, last_sibling=None):
+    def __init__(self, dom_node, parent=None, last_sibling=None, font_modifiers=()):
         self.dom_node = dom_node
         self.parent = parent
         self.last_sibling = last_sibling
@@ -38,22 +41,49 @@ class Layout:
 
         # Hidden by default
         self.x, self.y = 0, 0
+        if self.parent is not None:
+            self.x, self.y = self.parent.x, self.parent.y
         self.width, self.height = 0, 0
 
+        self.font = DEFAULT_FONT
+        self.font_metrics = DEFAULT_FONT_METRICS
+        self.text_color = DEFAULT_TEXT_COLOR
+
+        self.font_modifiers = font_modifiers
+        self.change_font_based_on_modifiers()
+
+    def change_font_based_on_modifiers(self):
+        style = None
+        if "a" in self.font_modifiers:
+            self.text_color = skia.ColorBLUE
+
+        if "i" in self.font_modifiers and "b" in self.font_modifiers:
+            style = skia.FontStyle.BoldItalic()
+        elif "i" in self.font_modifiers:
+            style = skia.FontStyle.Italic()
+        elif "b" in self.font_modifiers:
+            style = skia.FontStyle.Bold()
+
+        if style:
+            typeface = skia.Typeface(None, style)
+            self.font = skia.Font(typeface, size=DEFAULT_FONT_SIZE)
+            self.font_metrics = self.font_metrics
+
     def __paint(self, canvas):
-        right = self.y + self.width
-        bottom = self.x + self.height
+        right = self.x + self.width
+        bottom = self.y + self.height
         rect = skia.Rect(self.x, self.y, right, bottom)
-        paint = skia.Paint(Color=random_color())
+        paint = skia.Paint(Color=skia.ColorTRANSPARENT)
         canvas.drawRect(rect, paint)
 
         if isinstance(self.dom_node, TextNode):
             paint = skia.Paint(
                 AntiAlias=True,
-                Color=skia.ColorWHITE,
+                Color=self.text_color,
             )
-            textBlob = skia.TextBlob(self.dom_node.tag.data, DEFAULT_FONT)
-            canvas.drawTextBlob(textBlob, self.x, self.y, paint)
+            text = self.dom_node.tag.data
+            textBlob = skia.TextBlob(text, self.font)
+            canvas.drawTextBlob(textBlob, self.x, self.y + self.height, paint)
 
     def paint(self, canvas):
         self.__paint(canvas)
@@ -71,7 +101,11 @@ class Layout:
             child.show_tree(tab=tab + 1)
 
     def __repr__(self):
-        return f"<Layout::{self.dom_node.tag} (x:{self.x}, y:{self.y}, w:{self.width}, h:{self.height})>"
+        layout_type = self.__class__.__name__
+        node_desc = f"{layout_type}::{self.dom_node.tag}"
+        geometric_desc = f"(x:{self.x}, y:{self.y}, w:{self.width}, h:{self.height})"
+        font_desc = " " + (", ".join(self.font_modifiers)) if self.font_modifiers else ""
+        return f"<{node_desc} {geometric_desc}{font_desc}>"
 
 
 class DocumentLayout(Layout):
@@ -81,6 +115,7 @@ class DocumentLayout(Layout):
         self.width, self.height = viewport_width, viewport_height
 
     def find_body_node(self):
+        print(self.dom_node.children)
         for child in self.dom_node.children:
             if child.tag.tag_name == "body":
                 return child
@@ -88,14 +123,15 @@ class DocumentLayout(Layout):
     def build_layout(self):
         body_dom_node = self.find_body_node()
         # We know body is a block layout, hence no check
-        body_layout_node = BlockLayout(body_dom_node, parent=self, last_sibling=None)
+        body_layout_node = BlockLayout(body_dom_node, parent=self, last_sibling=None,
+                                       font_modifiers=self.font_modifiers)
         self.children.append(body_layout_node)
         body_layout_node.build_layout()
 
 
 class BlockLayout(Layout):
-    def __init__(self, dom_node, parent, last_sibling):
-        super().__init__(dom_node, parent, last_sibling)
+    def __init__(self, dom_node, parent, last_sibling, font_modifiers):
+        super().__init__(dom_node, parent, last_sibling, font_modifiers)
 
         # Block Layouts are greedy as they take up maximum possible space
         # from this we know it's width will be equal to the parent's and
@@ -122,7 +158,7 @@ class BlockLayout(Layout):
             if isinstance(child_dom_node, TextNode):
                 child_layout_node = InlineLayout.handle_text_elem(self, child_dom_node, last_sibling)
             else:
-                child_layout_node = layout_mode(child_dom_node, self, last_sibling)
+                child_layout_node = layout_mode(child_dom_node, self, last_sibling, self.font_modifiers)
                 child_layout_node.build_layout()
                 self.children.append(child_layout_node)
             last_sibling = child_layout_node
@@ -132,8 +168,12 @@ class BlockLayout(Layout):
 
 class InlineLayout(Layout):
 
-    def __init__(self, dom_node, parent, last_sibling):
-        super().__init__(dom_node, parent, last_sibling)
+    def __init__(self, dom_node, parent, last_sibling, font_modifiers):
+        super().__init__(dom_node, parent, last_sibling, font_modifiers)
+
+        tag_name = self.dom_node.tag.tag_name
+        if tag_name in ("i", "b", "a"):
+            self.font_modifiers += tuple(tag_name)
 
         self.nearest_block_ancestor = None  # Setting to None initially, so it is calculated only when required.
 
@@ -156,7 +196,7 @@ class InlineLayout(Layout):
         elif isinstance(layout_node, DocumentLayout):
             return 0
         elif layout_node.parent is not None:
-            return layout_node.find_first_block_ancestor(layout_node=self.parent)
+            return layout_node.find_nearest_block_ancestor(layout_node=self.parent)
         else:
             return 0
 
@@ -165,18 +205,18 @@ class InlineLayout(Layout):
             self.nearest_block_ancestor = self.find_nearest_block_ancestor()
 
         if self.nearest_block_ancestor != 0:
-            layout_node = BlockLayout(dom_node, self.nearest_block_ancestor, last_sibling)
+            layout_node = BlockLayout(dom_node, self.nearest_block_ancestor, last_sibling, self.font_modifiers)
             layout_node.build_layout()
             layout_node.parent = self
             self.children.append(layout_node)
             return layout_node
 
     def handle_text_elem(self, dom_node, last_sibling):
-        layout_node = InlineLayout(dom_node, self, last_sibling)
+        layout_node = InlineLayout(dom_node, self, last_sibling, self.font_modifiers)
         node_text = dom_node.tag.data
-        layout_node.width = DEFAULT_FONT.measureText(node_text)
+        layout_node.width = layout_node.font.measureText(node_text)
 
-        ascent, descent = DEFAULT_FONT_METRICS.fAscent, DEFAULT_FONT_METRICS.fDescent
+        ascent, descent = layout_node.font_metrics.fAscent, layout_node.font_metrics.fDescent
         layout_node.height = descent - ascent
 
         self.children.append(layout_node)
@@ -192,7 +232,7 @@ class InlineLayout(Layout):
             elif isinstance(child_dom_node, TextNode):
                 layout_node = self.handle_text_elem(child_dom_node, last_sibling)
             else:
-                layout_node = InlineLayout(child_dom_node, self, last_sibling)
+                layout_node = InlineLayout(child_dom_node, self, last_sibling, self.font_modifiers)
                 layout_node.build_layout()
                 self.children.append(layout_node)
 
