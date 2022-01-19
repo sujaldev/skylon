@@ -2,12 +2,16 @@ import os
 import shutil
 
 dirs = [
+    "../src/chrome/webrtc_event_logs",
+    "../src/chrome/blob_storage",
+    "../src/chrome/VideoDecodeStats"
     "../src/webrtc_event_logs",
     "../src/blob_storage",
     "../src/VideoDecodeStats"
 ]
 
 files = [
+    "../src/chrome/error.log"
     "../src/error.log"
 ]
 
