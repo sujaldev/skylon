@@ -57,7 +57,7 @@ class TabUI:
         try:
             if content is None:
                 request = requests.get(self.url)
-                content = request.content.decode
+                content = request.content.decode()
                 if not request.ok:
                     return
         except Exception as e:
