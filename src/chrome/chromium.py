@@ -8,6 +8,11 @@ from PyQt5.QtWidgets import *
 
 from src.chrome.navbar import NavigationBar
 
+import platform
+
+WINDOWS = (platform.system() == "Windows")
+LINUX = (platform.system() == "Linux")
+
 
 class ChromiumApplication(QApplication):
     def __init__(self):
@@ -77,13 +82,20 @@ class WebViewWidget(QWidget):
         super().__init__(parent)
         self.container = parent
         self.browser = None
-        self.browser_widget = None
-        self_layout = QVBoxLayout(self)
-        self_layout.setContentsMargins(0, 0, 0, 0)
+        if LINUX:
+            self.browser_widget = None
+            self_layout = QVBoxLayout(self)
+            self_layout.setContentsMargins(0, 0, 0, 0)
         self.init_browser()
 
     def init_browser(self):
-        browser_window = QWindow()
+        if LINUX:
+            browser_window = QWindow()
+        elif WINDOWS:
+            browser_window = self
+        else:
+            raise Exception("Unsupported Platform")
+
         window_config = cef.WindowInfo()
         rect_pos_and_size = [0, 0, self.width(), self.height()]
         window_config.SetAsChild(
@@ -91,8 +103,9 @@ class WebViewWidget(QWidget):
             rect_pos_and_size
         )
         self.browser = cef.CreateBrowserSync(window_config, url=self.DEFAULT_URL)
-        self.browser_widget = QWidget.createWindowContainer(browser_window)
-        self.layout().addWidget(self.browser_widget)
+        if LINUX:
+            self.browser_widget = QWidget.createWindowContainer(browser_window)
+            self.layout().addWidget(self.browser_widget)
         self.set_handlers()
 
     def set_handlers(self):
@@ -100,8 +113,16 @@ class WebViewWidget(QWidget):
             self.browser.SetClientHandler(handler(self))
 
     def resizeEvent(self, event):
-        if self.browser is not None:
+        if self.browser is None:
+            return
+
+        if LINUX:
             self.browser.SetBounds(0, 0, self.width(), self.height())
+        elif WINDOWS:
+            window_utils = cef.WindowUtils()
+            window_utils.OnSize(int(self.winId()), 0, 0, 0)
+        else:
+            raise Exception("Unsupported Platform")
 
 
 def launch_chromium():
