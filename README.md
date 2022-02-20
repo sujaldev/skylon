@@ -38,7 +38,14 @@ To contribute to the skylon engine itself, create a pull request for the
 git clone https://github.com/sujaldev/skylon
 cd skylon
 pip install -r requirements.txt
-python src/main.py
+cd src
+export PYTHONPATH='../:./skylon'  # or you can use the full path like '/path/to/cloned/directory:/path/to/cloned/directory/src/skylon'
+python main.py
+```
+
+NOTE: As of now the latest python version supported by cefpython3 is [3.7](https://github.com/cztomczak/cefpython#latest-release), so you will need to install python 3.7 and if you are using virtualenv you can specify it as below:
+```shell
+virtualenv --python=python3.7 dest
 ```
 
 ### SUPPORTED PLATFORMS
