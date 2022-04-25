@@ -1,5 +1,5 @@
 <h1 align=center>
-  <img alt="Skylon Logo" src="https://github.com/sujaldev/skylon/raw/main/docs/images/logo.png?raw=true" width=300><br>
+  <img alt="Skylon Logo" src="https://github.com/sujaldev/skylon/raw/main/docs/images/logo.svg?raw=true" width=300><br>
   SKYLON
 </h1>
 
