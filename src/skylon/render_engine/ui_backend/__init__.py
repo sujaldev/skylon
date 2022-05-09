@@ -31,7 +31,7 @@ class Window:
         if flags is None:
             self.flags = self.DEFAULT_FLAGS
 
-        # Handlers
+        # Event Handlers
         self.handlers = handlers
         if self.handlers is None:
             self.handlers = {}
@@ -75,8 +75,11 @@ class Window:
         )
         # noinspection PyArgumentList
         surface = skia.Surface.MakeRaster(surface_blueprint)
+        
+        # make the canvas white by default
         with surface as canvas:
             canvas.drawColor(skia.ColorWHITE)
+            
         return surface
 
     def __update_pixel_data_from_skia_surface(self):
@@ -89,7 +92,7 @@ class Window:
     def __transform_skia_surface_to_SDL_surface(self):
         """
         Converts Skia Surface to an SDL surface by first converting
-        Skia Surface to Pixel Data using .__pixels_from_skia_surface()
+        Skia Surface to Pixel Data using .__update_pixel_data_from_skia_surface
         """
         self.__update_pixel_data_from_skia_surface()
         sdl_surface = sdl.SDL_CreateRGBSurfaceFrom(
@@ -132,6 +135,7 @@ class Window:
     def __handle_resize(self, event):
         self.width = event.window.data1
         self.height = event.window.data2
+        # Create a new skia surface from the updated dimensions (required so no segfaults occur)
         self.skia_surface = self.__create_skia_surface()
 
 
