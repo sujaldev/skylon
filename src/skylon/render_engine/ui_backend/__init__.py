@@ -27,9 +27,10 @@ class Window:
             self.y = sdl.SDL_WINDOWPOS_CENTERED
 
         # Override flags
-        self.flags = flags
         if flags is None:
             self.flags = self.DEFAULT_FLAGS
+        else:
+            self.flags = flags
 
         # Event Handlers
         self.handlers = handlers
