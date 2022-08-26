@@ -23,12 +23,16 @@ def launch():
     if is_first_launch():
         chrome.WelcomeLauncher()
     else:
-        user_data = get_user_data()
-        engine_preference = user_data[-1]
-        if engine_preference == "chromium":
+        # user_data = get_user_data()
+        # engine_preference = user_data[-1]
+        engine_preference = input("Enter engine preference (skylon(s)/chromium(c)): ").lower()
+        if engine_preference in ("chromium", "c"):
             chrome.launch_chromium()
-        else:
+        elif engine_preference in ("skylon", "s"):
             Skylon("Skylon Browser", 1000, 800).start_event_loop()
+        else:
+            print("Wrong engine choice, try again")
+            launch()
 
 
 launch()
