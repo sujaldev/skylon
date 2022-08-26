@@ -40,6 +40,9 @@ To contribute to the skylon engine itself, create a pull request for the
 ```shell
 git clone https://github.com/sujaldev/skylon
 cd skylon
+# my aws free tier ended, the main branch relies on a database and so will not work
+# I have pushed a temporary fix for this on the server-down branch
+# switch to it by running git checkout server-down
 pip install -r requirements.txt
 cd src
 export PYTHONPATH='../:./skylon'  # or you can use the full path like '/path/to/cloned/directory:/path/to/cloned/directory/src/skylon'
