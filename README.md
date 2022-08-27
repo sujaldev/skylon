@@ -1,15 +1,18 @@
 <h1 align=center>
   <img alt="Skylon Logo" src="https://github.com/sujaldev/skylon/raw/main/docs/images/logo.svg?raw=true" width=300><br>
-  SKYLON
+  SKYLON<br>
+  <img alt="Badge" src="https://github.com/sujaldev/skylon/raw/main/docs/images/badge.svg?raw=true">
 </h1>
 
 This is my attempt at making a browser, which started with different motives but
 now this is just a toy browser.
 
-It features two engines:
+### Supported Engines:
 
-- Chromium: to support, well, the entire web.
-- Skylon: the toy engine I built.
+| Engine Name | Remarks                          |
+|-------------|----------------------------------|
+| Chromium    | To support, well, the entire web |
+| Skylon      | The toy engine I built           |
 
 To embed chromium [cefpython](https://github.com/cztomczak/cefpython) was used.
 
@@ -17,18 +20,9 @@ Since this is a school project and implementing data storage either via mysql or
 pickle was a requirement, I have implemented a small user data section so that
 it can store your engine preference.
 
-### SCREENSHOTS
+### DEMO
 
-_Welcome Launcher_
-![Welcome Launcher](./docs/images/welcome.png)
-
-_Welcome Launcher Sign Up/Login_
-![Welcome Launcher](./docs/images/welcome-login-signup.png)
-
-_Chromium_
-![img.png](./docs/images/chromium.png)
-_Skylon_
-![Skylon](./docs/images/skylon.png)
+https://github.com/sujaldev/skylon/raw/main/docs/demo.mp4
 
 ### CONTRIBUTE
 
@@ -49,7 +43,10 @@ export PYTHONPATH='../:./skylon'  # or you can use the full path like '/path/to/
 python main.py
 ```
 
-NOTE: As of now the latest python version supported by cefpython3 is [3.7](https://github.com/cztomczak/cefpython#latest-release), so you will need to install python 3.7 and if you are using virtualenv you can specify it as below:
+NOTE: As of now the latest python version supported by cefpython3
+is [3.7](https://github.com/cztomczak/cefpython#latest-release), so you will need to install python 3.7 and if you are
+using virtualenv you can specify it as below:
+
 ```shell
 virtualenv --python=python3.7 dest
 ```
