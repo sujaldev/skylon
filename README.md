@@ -1,7 +1,6 @@
 <h1 align=center>
   <img alt="Skylon Logo" src="https://github.com/sujaldev/skylon/raw/main/docs/images/logo.svg?raw=true" width=300><br>
-  SKYLON<br>
-  <img alt="Badge" src="https://github.com/sujaldev/skylon/raw/main/docs/images/badge.svg?raw=true">
+  SKYLON <img alt="Badge" src="https://github.com/sujaldev/skylon/raw/main/docs/images/badge.svg?raw=true" height=30px align=center>
 </h1>
 
 This is my attempt at making a browser, which started with different motives but
